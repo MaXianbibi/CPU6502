@@ -9,7 +9,7 @@ class CPU
 private:
 
     WORD PC{0};
-    WORD SP{0};
+    BYTE SP{0};
     
     BYTE A{0}, X{0}, Y{0};
 

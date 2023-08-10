@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Memory.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jmorneau <jmorneau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: justinmorneau <justinmorneau@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 15:50:46 by jmorneau          #+#    #+#             */
-/*   Updated: 2023/08/09 16:22:00 by jmorneau         ###   ########.fr       */
+/*   Updated: 2023/08/10 00:15:29 by justinmorne      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,11 @@ public:
 	BYTE read(WORD addr) const;
 	BYTE operator[](WORD addr) const;
 
+
+	// Write
+	void write(WORD addr, BYTE value);
+	BYTE& operator[](WORD addr);
+	
 };
 
 

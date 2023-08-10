@@ -2,6 +2,8 @@
 #include "class/Memory/Memory.hpp"
 
 
+
+
 int main(void)
 {
 	Memory mem;
@@ -9,10 +11,15 @@ int main(void)
 
 
 	cpu.reset(mem);
-	cpu.execute(mem, 10);
-	cpu.execute(mem, 10);
-	cpu.execute(mem, 10);
-	cpu.execute(mem, 10);
 
+	mem[cpu.getPC()] = INS_LDA_IM;
+	mem[cpu.getPC() + 1] = 0x42;
+	cpu.execute(mem, 2);
+	cpu.execute(mem, 2);
+
+
+	std::cout << cpu.getPC() << std::endl;
+
+	std::cout << (int)cpu.getA() << std::endl;
 	return 0;
 }

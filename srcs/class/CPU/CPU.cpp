@@ -1,5 +1,6 @@
 #include "CPU.hpp"
 
+
 CPU::CPU()
 {
 }
@@ -41,7 +42,23 @@ void CPU::execute(Memory &mem, u32 Cycles)
 	while (Cycles > 0)
 	{
 		BYTE Ins = fetchBytes(mem, Cycles);
-		(void)Ins;
+		switch ( Ins )
+		{
+			case INS_LDA_IM:
+			{
+				std::cout << "[DEBUG] : INS_LDA_IM" << std::endl;
+
+				BYTE value = fetchBytes( mem, Cycles);
+				A = value;
+				P.flags.Zero = (A == 0);
+				P.flags.Negative = (A & 0b10000000) > 0;
+			} break ;
+			default:
+			{
+				std::cout << "Instruction not handled " << Ins << std::endl;
+			} break ;
+
+		}
 	}
 
 }

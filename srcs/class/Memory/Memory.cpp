@@ -26,3 +26,14 @@ BYTE Memory::operator[](WORD addr) const
 {
 	return this->read(addr);
 }
+
+// Write
+void Memory::write(WORD addr, BYTE data)
+{
+	this->Data[addr] = data;
+}
+
+BYTE & Memory::operator[](WORD addr)
+{
+	return this->Data[addr];
+}
