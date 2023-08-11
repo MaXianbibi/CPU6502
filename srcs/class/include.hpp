@@ -20,7 +20,7 @@ using WORD = unsigned short;
 using u32 = unsigned int;
 
 // Starting Memory Address
-static constexpr WORD START_SP          = 0x0100;
+static constexpr WORD START_SP          = 0x01FD; // 0x01FF - 0x0100 ( 0x01FF not included, 0x01FD )
 static constexpr WORD START_PC          = 0xFFFC;
 
 // Clock speed

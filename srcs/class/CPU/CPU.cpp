@@ -31,32 +31,28 @@ BYTE CPU::fetchBytes(Memory &mem, u32 &Cycles)
 {
 	BYTE data = mem.read(this->PC);
 	this->PC++;
-	Cycles--;
 	return data;
 }
 
 
-// Execute
+// Execute Ins
 void CPU::execute(Memory &mem, u32 Cycles)
 {
+	// Run for 'n' cycles
 	while (Cycles > 0)
 	{
-		BYTE Ins = fetchBytes(mem, Cycles);
-		switch ( Ins )
+		// Fetch opcode
+		BYTE opcode = this->fetchBytes(mem, Cycles);
+		
+		// Look up opcode and execute
+		switch (opcode)
 		{
-			case INS_LDA_IM:
-			{
-				std::cout << "[DEBUG] : INS_LDA_IM" << std::endl;
-
-				BYTE value = fetchBytes( mem, Cycles);
-				A = value;
-				P.flags.Zero = (A == 0);
-				P.flags.Negative = (A & 0b10000000) > 0;
-			} break ;
-			default:
-			{
-				std::cout << "Instruction not handled " << Ins << std::endl;
-			} break ;
+		case :
+			break;
+		
+		default:
+			std::cout << "Opcode not found" << std::endl;
+			break;
 		}
 	}
 }
