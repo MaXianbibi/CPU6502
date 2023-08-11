@@ -2,7 +2,7 @@
 #include "class/Memory/Memory.hpp"
 
 
-
+#include <iostream>
 
 int main(void)
 {
@@ -14,12 +14,10 @@ int main(void)
 
 	mem[cpu.getPC()] = INS_LDA_IM;
 	mem[cpu.getPC() + 1] = 0x42;
-	cpu.execute(mem, 2);
-	cpu.execute(mem, 2);
+	cpu.execute();
 
+	printHexDebug("final pc : ", cpu.getPC());
+	// cpu.execute();
 
-	std::cout << cpu.getPC() << std::endl;
-
-	std::cout << (int)cpu.getA() << std::endl;
 	return 0;
 }

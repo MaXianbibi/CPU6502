@@ -13,6 +13,12 @@ void Memory::init()
 {
 	for (u32 i = 0; i < MAX_MEMORY; i++)
 		this->Data[i] = 0;
+	this->Data[START_PC] = START_RESET >> 8;
+	this->Data[START_PC + 1] = START_RESET & 0xFF;
+
+
+	// Test
+	this->Data[START_RESET] = 0x02;
 }
 
 

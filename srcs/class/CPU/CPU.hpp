@@ -1,14 +1,16 @@
 #ifndef CPU_HPP
 #define CPU_HPP
 
+
+
 #include "../include.hpp"
 #include "../Memory/Memory.hpp"
 
 
 class CPU;
 
-using InsFunc = void (CPU::*) (Memory &mem);
-using FetchFunc = BYTE (CPU::*) (Memory &mem);
+using InsFunc = BYTE (CPU::*) (void);
+
 
 class CPU
 {
@@ -34,8 +36,11 @@ private:
         BYTE status{0};
     } P{};
 
+
+    Memory *mem;
 public:
     CPU();
+    CPU(Memory &mem);
     ~CPU();
 
 
@@ -45,13 +50,21 @@ public:
 
 
 	// Execute
-	void execute(Memory &mem, u32 Cycles);
-	BYTE fetchBytes(Memory &mem, u32 &Cycles);
-
+	void execute(void);
+	BYTE fetchBytes();
 
     // Clock  + execute
-    void executeClock(Memory &mem, u32 &Cycles, InsFunc insFunc);
-    BYTE executeClock(Memory &mem, u32 &Cycles, FetchFunc insFunc);
+    BYTE executeClock(InsFunc insFunc);
+
+    // Instructions
+
+
+
+
+
+
+
+
 
 
 

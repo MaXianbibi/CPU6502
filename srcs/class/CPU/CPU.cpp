@@ -1,8 +1,14 @@
 #include "CPU.hpp"
-
+#include "../INS/INS.hpp"
 
 CPU::CPU()
 {
+	this->reset();
+}
+
+CPU::CPU(Memory &memory)
+{
+	this->reset(memory);
 }
 
 CPU::~CPU()
@@ -18,57 +24,67 @@ void CPU::reset()
 	this->X = 0;
 	this->Y = 0;
 	this->P.status = 0x24;
+	this->mem = nullptr;
 }
 
 void CPU::reset(Memory &mem)
 {
 	this->reset();
 	mem.init();
+	this->mem = &mem;
+
+	JMP op(*this);
+	op.run();
 }
 
 // Fetch
-BYTE CPU::fetchBytes(Memory &mem, u32 &Cycles)
+// Fetch est une oppération qui demande un cycle de CPU
+BYTE CPU::fetchBytes(void)
 {
-	BYTE data = mem.read(this->PC);
+	BYTE value = this->mem->read(this->PC);
 	this->PC++;
-	return data;
+	return value;
 }
 
-
 // Execute Ins
-void CPU::execute(Memory &mem, u32 Cycles)
+void CPU::execute(void)
 {
-	// Run for 'n' cycles
-	while (Cycles > 0)
+	// Fetch opcode
+
+	std::cout << "pc at exec : " << std::hex << getPC() << std::endl;
+
+	BYTE OP_CODE = this->executeClock(&CPU::fetchBytes);
+
+	printHexDebug("pc after exec : ", getPC());
+
+	// Look up opcode and execute
+	switch (OP_CODE)
 	{
-		// Fetch opcode
-		BYTE opcode = this->fetchBytes(mem, Cycles);
+	case INS_JMP_ABS:
+	{
+		JMP op(*this);
+		op.run();
+		break;
+	}
 		
-		// Look up opcode and execute
-		switch (opcode)
-		{
-		case :
-			break;
-		
-		default:
-			std::cout << "Opcode not found" << std::endl;
-			break;
-		}
+	default:
+		printHexDebug("Instruction non reconnue : ", OP_CODE);
+		break;
 	}
 }
 
 
+
 // La fonction est wrapper qui execute un Ins en simulant la clock speed du 6502
-void CPU::executeClock(Memory &mem, u32 &Cycles, InsFunc insFunc)
+BYTE CPU::executeClock(InsFunc insFunc)
 {
 	// start le timer
 	auto start = std::chrono::high_resolution_clock::now();
 
 	// execute l'instruction
-	(this->*insFunc)(mem);
+	BYTE value = (this->*insFunc)();
 
 	// diminue le cycle 
-	Cycles--;
 
 	// arrete le temps
     auto end = std::chrono::high_resolution_clock::now();
@@ -77,26 +93,9 @@ void CPU::executeClock(Memory &mem, u32 &Cycles, InsFunc insFunc)
 	// stop le temps pour simuler la clock spped du 6502
 	if (elapsed < time_expected)
 		std::this_thread::sleep_for(std::chrono::microseconds(time_expected - elapsed));
-}
-
-// Même chose sauf qu'elle est destiné a l'instrucion Fetch
-BYTE CPU::executeClock(Memory &mem, u32 &Cycles, FetchFunc fetchFunc)
-{
-	auto start = std::chrono::high_resolution_clock::now();
-	BYTE value = (this->*fetchFunc)(mem);
-
-	Cycles--;
-    auto end = std::chrono::high_resolution_clock::now();
-    auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-
-	if (elapsed < time_expected)
-		std::this_thread::sleep_for(std::chrono::microseconds(time_expected - elapsed));
 
 	return value;
 }
-
-
-
 
 // Getter
 BYTE CPU::getA() const
