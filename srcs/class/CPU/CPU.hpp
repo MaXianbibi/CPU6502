@@ -4,13 +4,17 @@
 #include "../include.hpp"
 #include "../Memory/Memory.hpp"
 
+
+class CPU;
+
+using InsFunc = void (CPU::*) (Memory &mem);
+using FetchFunc = BYTE (CPU::*) (Memory &mem);
+
 class CPU
 {
 private:
-
     WORD PC{0};
     BYTE SP{0};
-    
     BYTE A{0}, X{0}, Y{0};
 
     union Status
@@ -44,6 +48,10 @@ public:
 	void execute(Memory &mem, u32 Cycles);
 	BYTE fetchBytes(Memory &mem, u32 &Cycles);
 
+
+    // Clock  + execute
+    void executeClock(Memory &mem, u32 &Cycles, InsFunc insFunc);
+    BYTE executeClock(Memory &mem, u32 &Cycles, FetchFunc insFunc);
 
 
 

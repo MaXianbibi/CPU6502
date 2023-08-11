@@ -12,8 +12,8 @@ CPU::~CPU()
 // Reset CPU
 void CPU::reset()
 {
-	this->PC = 0xFFFC; 
-	this->SP = 0x0100;
+	this->PC = START_PC; 
+	this->SP = 0;
 	this->A = 0;
 	this->X = 0;
 	this->Y = 0;
@@ -57,11 +57,50 @@ void CPU::execute(Memory &mem, u32 Cycles)
 			{
 				std::cout << "Instruction not handled " << Ins << std::endl;
 			} break ;
-
 		}
 	}
-
 }
+
+
+// La fonction est wrapper qui execute un Ins en simulant la clock speed du 6502
+void CPU::executeClock(Memory &mem, u32 &Cycles, InsFunc insFunc)
+{
+	// start le timer
+	auto start = std::chrono::high_resolution_clock::now();
+
+	// execute l'instruction
+	(this->*insFunc)(mem);
+
+	// diminue le cycle 
+	Cycles--;
+
+	// arrete le temps
+    auto end = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+
+	// stop le temps pour simuler la clock spped du 6502
+	if (elapsed < time_expected)
+		std::this_thread::sleep_for(std::chrono::microseconds(time_expected - elapsed));
+}
+
+// Même chose sauf qu'elle est destiné a l'instrucion Fetch
+BYTE CPU::executeClock(Memory &mem, u32 &Cycles, FetchFunc fetchFunc)
+{
+	auto start = std::chrono::high_resolution_clock::now();
+	BYTE value = (this->*fetchFunc)(mem);
+
+	Cycles--;
+    auto end = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+
+	if (elapsed < time_expected)
+		std::this_thread::sleep_for(std::chrono::microseconds(time_expected - elapsed));
+
+	return value;
+}
+
+
+
 
 // Getter
 BYTE CPU::getA() const
