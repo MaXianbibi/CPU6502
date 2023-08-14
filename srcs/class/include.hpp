@@ -8,7 +8,6 @@
 
 #include "iostream"
 
-
 #define NORM    0
 #define NES     1
 
@@ -41,6 +40,7 @@ const u32 NES_CLOCK_SPEED               = 1789773; // 1.789773 MHz
 const BYTE INS_LDA_IM                   = 0xA9;
 const BYTE INS_JMP_ABS                  = 0x4C;
 const BYTE INS_JMP_IND                  = 0x6C;
+const BYTE INS_JSR_ABS                  = 0x20;
 
 
 // Special Operation Code

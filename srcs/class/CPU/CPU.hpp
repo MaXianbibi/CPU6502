@@ -1,16 +1,11 @@
 #ifndef CPU_HPP
 #define CPU_HPP
 
-
-
-#include "../include.hpp"
 #include "../Memory/Memory.hpp"
-
 
 class CPU;
 
 using InsFunc = BYTE (CPU::*) (void);
-
 
 class CPU
 {

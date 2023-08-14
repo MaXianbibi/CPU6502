@@ -1,5 +1,8 @@
 #include "CPU.hpp"
 #include "../INS/INS.hpp"
+#include "../INS/JMP.hpp"
+#include "../INS/JSR.hpp"
+
 
 CPU::CPU()
 {
@@ -67,6 +70,12 @@ void CPU::execute(void)
 	case INS_JMP_IND:
 	{
 		JMP_IND op(*this);
+		op.run();
+		break;
+	}
+	case INS_JSR_ABS:
+	{
+		JSR op(*this);
 		op.run();
 		break;
 	}

@@ -12,15 +12,16 @@ int main(void)
 
 	cpu.reset(mem);
 
-
-	putIns(cpu, START_RESET, 0x4C);
+	putIns(cpu, START_RESET, INS_JMP_IND);
 	putAdress(cpu, START_RESET + 1, 0xB213);
+	putIns(cpu, 0xB213, 0x30);
+	putIns(cpu, 0xB214, 0x20);
+	// putIns(cpu, 0x2020, INS_JSR_ABS);
 
-	putIns(cpu, 0xB213, 0xA);
-
+	// putAdress(cpu, 0x2021, 0xFFBB );
 
 	cpu.execute();
-	cpu.execute();
+	// cpu.execute();
 
 	return 0;
 }
