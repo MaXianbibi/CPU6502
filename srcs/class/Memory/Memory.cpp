@@ -18,7 +18,9 @@ void Memory::init()
 
 
 	// Test
-	this->Data[START_RESET] = 0x02;
+	// this->Data[START_RESET] = 0x6C;
+	// this->Data[START_RESET + 1] = START_PC >> 8;
+	// this->Data[START_RESET + 2] = START_PC & 0xFF;
 }
 
 

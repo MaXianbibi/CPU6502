@@ -33,6 +33,8 @@ void CPU::reset(Memory &mem)
 	mem.init();
 	this->mem = &mem;
 
+	for (size_t i = 0; i < 7; i++)
+		this->executeClock(NULL);
 	JMP op(*this);
 	op.run();
 }
@@ -51,11 +53,7 @@ void CPU::execute(void)
 {
 	// Fetch opcode
 
-	std::cout << "pc at exec : " << std::hex << getPC() << std::endl;
-
 	BYTE OP_CODE = this->executeClock(&CPU::fetchBytes);
-
-	printHexDebug("pc after exec : ", getPC());
 
 	// Look up opcode and execute
 	switch (OP_CODE)
@@ -66,7 +64,12 @@ void CPU::execute(void)
 		op.run();
 		break;
 	}
-		
+	case INS_JMP_IND:
+	{
+		JMP_IND op(*this);
+		op.run();
+		break;
+	}
 	default:
 		printHexDebug("Instruction non reconnue : ", OP_CODE);
 		break;
@@ -79,13 +82,13 @@ void CPU::execute(void)
 BYTE CPU::executeClock(InsFunc insFunc)
 {
 	// start le timer
+
 	auto start = std::chrono::high_resolution_clock::now();
+	BYTE value = 0;
 
 	// execute l'instruction
-	BYTE value = (this->*insFunc)();
-
-	// diminue le cycle 
-
+	if (insFunc)
+		value = (this->*insFunc)();
 	// arrete le temps
     auto end = std::chrono::high_resolution_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
@@ -128,6 +131,11 @@ WORD CPU::getSP() const
 	return this->SP;
 }
 
+Memory *CPU::getMemory() const
+{
+	return this->mem;
+}
+
 // Setter
 void CPU::setA(BYTE A)
 {
@@ -158,3 +166,9 @@ void CPU::setSP(WORD SP)
 {
 	this->SP = SP;
 }
+
+void CPU::setMemory(Memory *mem)
+{
+	this->mem = mem;
+}
+

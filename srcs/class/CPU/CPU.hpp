@@ -78,6 +78,9 @@ public:
 	WORD getPC() const;
 	WORD getSP() const;
 
+	Memory *getMemory() const;
+
+
 	// Setter
 	void setA(BYTE);
 	void setX(BYTE);
@@ -85,6 +88,8 @@ public:
 	void setStatus(BYTE);
 	void setPC(WORD);
 	void setSP(WORD);
+
+	void setMemory(Memory *mem);
 
 };
 

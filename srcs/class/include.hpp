@@ -40,6 +40,7 @@ const u32 NES_CLOCK_SPEED               = 1789773; // 1.789773 MHz
 // Operation Code
 const BYTE INS_LDA_IM                   = 0xA9;
 const BYTE INS_JMP_ABS                  = 0x4C;
+const BYTE INS_JMP_IND                  = 0x6C;
 
 
 // Special Operation Code
@@ -48,9 +49,16 @@ const BYTE INS_JMP_ABS                  = 0x4C;
 const BYTE INS_PASS_TIME                = 0x02;
  
 
+class CPU;
+
+// Instruction Management
+void putIns(CPU &CPU, Adress Index, unsigned char ins);
+
+// Memory Management
+void putAdress(CPU &CPU, Adress Index, Adress adress);
+Adress getAdress(CPU &CPU);
 
 // debug fonc
-
 void printHexDebug(std::string msg, u32 hex);
 void printHexDebug( u32 hex );
 void printHex(std::string msg, u32 hex );
