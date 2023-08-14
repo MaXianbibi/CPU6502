@@ -91,7 +91,6 @@ void CPU::execute(void)
 BYTE CPU::executeClock(InsFunc insFunc)
 {
 	// start le timer
-
 	auto start = std::chrono::high_resolution_clock::now();
 	BYTE value = 0;
 
@@ -107,6 +106,18 @@ BYTE CPU::executeClock(InsFunc insFunc)
 		std::this_thread::sleep_for(std::chrono::microseconds(time_expected - elapsed));
 
 	return value;
+}
+
+BYTE CPU::pushStack(void)
+{
+	this->mem->write(STACK_START - this->SP, getHigh(this->PC));
+	this->SP--;
+	this->PC++;
+	this->mem->write(STACK_START - this->SP, getLow(this->PC));
+	this->SP--;
+	this->PC++;
+
+	return 0;
 }
 
 // Getter

@@ -18,10 +18,6 @@ class JSR : public Ins
 
 		printHexDebug("JSR : TMP ADRESS : ", tmp_address);
 
-
-		_CPU.getMemory()->write(START_SP - _CPU.getSP(), tmp_address);
-		_CPU.setSP(_CPU.getSP() - 1);
-
 		
 		return;
 	}

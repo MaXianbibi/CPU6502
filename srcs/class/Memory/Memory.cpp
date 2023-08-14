@@ -15,7 +15,7 @@ void Memory::init()
 		this->Data[i] = 0;
 
 
-
+	// sa devrait être dans le fichier de config ou dans le CPU init, c'est plus logique ! 
 	this->Data[START_PC] = START_RESET & 0xFF;
 	this->Data[START_PC + 1] = (START_RESET >> 8) & 0xFF;
 
@@ -26,7 +26,6 @@ void Memory::init()
 }
 
 
-// Read
 // aucune vérification d'adresse
 // Techniquement, on ne peut pas lire en dehors de la mémoire
 BYTE Memory::read(WORD addr) const
@@ -39,7 +38,6 @@ BYTE Memory::operator[](WORD addr) const
 	return this->read(addr);
 }
 
-// Write
 // aucune vérification d'adresse, même chose que read
 void Memory::write(WORD addr, BYTE data)
 {

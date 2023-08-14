@@ -57,6 +57,8 @@ void putIns(CPU &CPU, Adress Index, unsigned char ins);
 // Memory Management
 void putAdress(CPU &CPU, Adress Index, Adress adress);
 Adress getAdress(CPU &CPU);
+BYTE getLow(Adress adress);
+BYTE getHigh(Adress adress);
 
 // debug fonc
 void printHexDebug(std::string msg, u32 hex);

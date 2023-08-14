@@ -51,6 +51,9 @@ public:
     // Clock  + execute
     BYTE executeClock(InsFunc insFunc);
 
+	// SP operations
+	void pushStack(void);
+
     // Instructions
 
 

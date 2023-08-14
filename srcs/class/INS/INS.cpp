@@ -20,3 +20,13 @@ void putIns(CPU &CPU, Adress Index, BYTE ins)
 {
 	CPU.getMemory()->write(Index, ins);
 }
+
+BYTE getLow(Adress adress)
+{
+	return adress & 0xFF;
+}
+
+BYTE getHigh(Adress adress) // :wink: 
+{
+	return (adress >> 8) & 0xFF;
+}
