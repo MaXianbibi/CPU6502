@@ -30,3 +30,4 @@ BYTE getHigh(Adress adress) // :wink:
 {
 	return (adress >> 8) & 0xFF;
 }
+

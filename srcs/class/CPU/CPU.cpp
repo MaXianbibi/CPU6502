@@ -51,6 +51,22 @@ BYTE CPU::fetchBytes(void)
 	return value;
 }
 
+BYTE CPU::pushStack(BYTE value)
+{
+	this->SP--;
+	this->mem->write(START_SP - this->SP, value);
+
+	printHexDebug("Push stack : ", value);
+
+	return 0;
+}
+
+BYTE CPU::pullStack(void) // je sais pas si sa prend un PC
+{
+	this->SP++;
+	return this->mem->read(START_SP - this->SP);
+}
+
 // Execute Ins
 void CPU::execute(void)
 {
@@ -108,16 +124,18 @@ BYTE CPU::executeClock(InsFunc insFunc)
 	return value;
 }
 
-BYTE CPU::pushStack(void)
+BYTE CPU::executeClock(InsFuncARG insFunc, BYTE arg)
 {
-	this->mem->write(STACK_START - this->SP, getHigh(this->PC));
-	this->SP--;
-	this->PC++;
-	this->mem->write(STACK_START - this->SP, getLow(this->PC));
-	this->SP--;
-	this->PC++;
+	auto start = std::chrono::high_resolution_clock::now();
+	BYTE value = 0;
 
-	return 0;
+	if (insFunc)
+		value = (this->*insFunc)(arg);
+    auto end = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+	if (elapsed < time_expected)
+		std::this_thread::sleep_for(std::chrono::microseconds(time_expected - elapsed));
+	return value;
 }
 
 // Getter

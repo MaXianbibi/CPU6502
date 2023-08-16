@@ -22,7 +22,7 @@ using Adress = WORD;
 using u32 = unsigned int;
 
 // Starting Memory Address
-const WORD START_SP                     = 0x01FD; // 0x01FF - 0x0100 ( 0x01FF not included, 0x01FD )
+const WORD START_SP                     = 0x01FF; // 0x01FF - 0x0100 ( 0x01FF not included, 0x01FD ), doit donc décrementer le SP avant de push
 const WORD START_PC                     = 0xFFFC;
 const Adress START_RESET                = 0x01FF;
 

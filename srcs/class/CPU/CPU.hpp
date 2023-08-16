@@ -6,6 +6,7 @@
 class CPU;
 
 using InsFunc = BYTE (CPU::*) (void);
+using InsFuncARG = BYTE (CPU::*) (BYTE);
 
 class CPU
 {
@@ -50,9 +51,13 @@ public:
 
     // Clock  + execute
     BYTE executeClock(InsFunc insFunc);
+    BYTE executeClock(InsFuncARG insFunc, BYTE arg);
 
 	// SP operations
-	void pushStack(void);
+	BYTE pushStack(BYTE value);
+
+	BYTE pullStack(void);
+
 
     // Instructions
 

@@ -16,12 +16,13 @@ int main(void)
 	putAdress(cpu, START_RESET + 1, 0xB213);
 	putIns(cpu, 0xB213, 0x30);
 	putIns(cpu, 0xB214, 0x20);
-	// putIns(cpu, 0x2020, INS_JSR_ABS);
+	putIns(cpu, 0x2030, INS_JSR_ABS);
+	putAdress(cpu, 0x2031, 0xABCD);
 
 	// putAdress(cpu, 0x2021, 0xFFBB );
 
 	cpu.execute();
-	// cpu.execute();
+	cpu.execute();
 
 	return 0;
 }
