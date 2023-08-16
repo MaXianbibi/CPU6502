@@ -7,19 +7,14 @@ private:
 	Adress address = 0;
 public:
 	JMP(CPU &CPU_) : Ins(3, CPU_) {
-		std::cout << "JMP" << std::endl;
+		printHex("JMP : ", _CPU.getPC());
 	}
 	~JMP() = default;
 
 	void run() override
 	{
 		address = getAdress(_CPU); // 2 cycles
-
-		printHexDebug("JMP ADRESS : ", address);
-
 		_CPU.setPC(address);
-
-		printHexDebug("JMP ADRESS : ", address);
 	}
 };
 
@@ -31,7 +26,7 @@ private:
 
 public:
 	JMP_IND(CPU &CPU) : Ins(3, CPU) {
-		std::cout << "JMP_IND" << std::endl;
+		printHex("JMP_IND : ", _CPU.getPC());
 	}
 	~JMP_IND() = default;
 
@@ -41,13 +36,11 @@ public:
 		// get indirect adress
 		address = getAdress(_CPU); // 2 cycles 
 
-		printHexDebug("JMP_IND ADRESS : ", address);
 		// je suis pas sur de ca
 		_CPU.setPC(address);
 		// get next pc adress 
 		address = getAdress(_CPU); // 2 cycles 
 		_CPU.setPC(address);
-		printHexDebug("JMP_IND ADRESS : ", address);
 	}
 };
 

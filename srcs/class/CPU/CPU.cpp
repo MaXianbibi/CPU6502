@@ -1,8 +1,6 @@
 #include "CPU.hpp"
-#include "../INS/INS.hpp"
-#include "../INS/JMP.hpp"
-#include "../INS/JSR.hpp"
 
+#include "../INS/INS_LIST.hpp"
 
 CPU::CPU()
 {
@@ -53,18 +51,27 @@ BYTE CPU::fetchBytes(void)
 
 BYTE CPU::pushStack(BYTE value)
 {
-	this->SP--;
+	if (this->SP == 0xFF - 1 )
+		fatal("Stack overflow");
+	this->SP++;
 	this->mem->write(START_SP - this->SP, value);
-
-	printHexDebug("Push stack : ", value);
-
 	return 0;
 }
 
 BYTE CPU::pullStack(void) // je sais pas si sa prend un PC
 {
-	this->SP++;
-	return this->mem->read(START_SP - this->SP);
+	if (this->SP == 0)
+		fatal("Stack underflow");
+	BYTE value = this->mem->read(START_SP - this->SP);
+	this->SP--;
+	return value;
+}
+
+BYTE CPU::execSetPC(Adress PC)
+{
+	this->PC = PC;
+
+	return 0;
 }
 
 // Execute Ins
@@ -95,6 +102,12 @@ void CPU::execute(void)
 		op.run();
 		break;
 	}
+	case INS_RTS_IMP:
+	{
+		RTS op(*this);
+		op.run();
+		break;
+	}
 	default:
 		printHexDebug("Instruction non reconnue : ", OP_CODE);
 		break;
@@ -102,7 +115,7 @@ void CPU::execute(void)
 }
 
 
-
+// C'est degalass avec les 3 wrappers différents, un template ou rassembler en une fonction plus global
 // La fonction est wrapper qui execute un Ins en simulant la clock speed du 6502
 BYTE CPU::executeClock(InsFunc insFunc)
 {
@@ -137,6 +150,23 @@ BYTE CPU::executeClock(InsFuncARG insFunc, BYTE arg)
 		std::this_thread::sleep_for(std::chrono::microseconds(time_expected - elapsed));
 	return value;
 }
+
+BYTE CPU::executeClock(InsFuncAdress insFunc, Adress arg)
+{
+	auto start = std::chrono::high_resolution_clock::now();
+	BYTE value = 0;
+
+	if (insFunc)
+		value = (this->*insFunc)(arg);
+    auto end = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+	if (elapsed < time_expected)
+		std::this_thread::sleep_for(std::chrono::microseconds(time_expected - elapsed));
+	return value;
+}
+
+
+
 
 // Getter
 BYTE CPU::getA() const
@@ -199,6 +229,8 @@ void CPU::setPC(WORD PC)
 {
 	this->PC = PC;
 }
+
+
 
 void CPU::setSP(WORD SP)
 {

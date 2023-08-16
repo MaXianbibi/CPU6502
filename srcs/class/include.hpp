@@ -22,7 +22,7 @@ using Adress = WORD;
 using u32 = unsigned int;
 
 // Starting Memory Address
-const WORD START_SP                     = 0x01FF; // 0x01FF - 0x0100 ( 0x01FF not included, 0x01FD ), doit donc décrementer le SP avant de push
+const WORD START_SP                     = 0x01FF; // 0x01FF - 0x0100 ( 0x01FF not included, 0x01FE ), doit donc décrementer le SP avant de push
 const WORD START_PC                     = 0xFFFC;
 const Adress START_RESET                = 0x01FF;
 
@@ -41,7 +41,7 @@ const BYTE INS_LDA_IM                   = 0xA9;
 const BYTE INS_JMP_ABS                  = 0x4C;
 const BYTE INS_JMP_IND                  = 0x6C;
 const BYTE INS_JSR_ABS                  = 0x20;
-
+const BYTE INS_RTS_IMP 	                = 0x60;
 
 // Special Operation Code
 // L'instruction sert a passer (fake) les 7 premiers cycles du reset puis de jump a 0xFFFC étant donner qu'il est compliquer d'émuler cela
@@ -66,5 +66,7 @@ void printHexDebug( u32 hex );
 void printHex(std::string msg, u32 hex );
 void printHex(u32 hex );
 
+// other
+void fatal(std::string msg);
 
 #endif

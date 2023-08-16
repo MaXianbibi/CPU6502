@@ -7,6 +7,7 @@ class CPU;
 
 using InsFunc = BYTE (CPU::*) (void);
 using InsFuncARG = BYTE (CPU::*) (BYTE);
+using InsFuncAdress = BYTE (CPU::*) (Adress); // a refaire
 
 class CPU
 {
@@ -48,30 +49,18 @@ public:
 	// Execute
 	void execute(void);
 	BYTE fetchBytes();
+	BYTE execSetPC(Adress PC);
 
     // Clock  + execute
-    BYTE executeClock(InsFunc insFunc);
+    BYTE executeClock(InsFunc insFunc); // Je pourrais regrouper les 3 sous une seule fonction ( )
     BYTE executeClock(InsFuncARG insFunc, BYTE arg);
+    BYTE executeClock(InsFuncAdress insFunc, Adress arg);
+	
 
 	// SP operations
 	BYTE pushStack(BYTE value);
 
 	BYTE pullStack(void);
-
-
-    // Instructions
-
-
-
-
-
-
-
-
-
-
-
-
 
 	// Getter
 	BYTE getA() const;
